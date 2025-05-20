@@ -1,7 +1,7 @@
 CREATE DATABASE IF NOT EXISTS clinica_veterinaria;
 USE clinica_veterinaria;
 
--- Tabela: Veterinario
+
 CREATE TABLE Veterinario (
     Veterinario_CRV CHAR(6) PRIMARY KEY,
     Nome VARCHAR(100) NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE Veterinario (
     CPF CHAR(11) NOT NULL UNIQUE
 );
 
--- Tabela: Cliente
+
 CREATE TABLE Cliente (
     Cliente_CPF CHAR(11) PRIMARY KEY,
     Nome VARCHAR(30) NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE Cliente (
     Celular VARCHAR(10) NOT NULL
 );
 
--- Tabela: Animal (com especialização embutida)
+
 CREATE TABLE Animal (
     Animal_ID INT AUTO_INCREMENT PRIMARY KEY,
     Nome VARCHAR(50),
@@ -34,7 +34,7 @@ CREATE TABLE Animal (
     FOREIGN KEY (Cliente_CPF) REFERENCES Cliente(Cliente_CPF)
 );
 
--- Tabela: Consulta
+
 CREATE TABLE Consulta (
     Consulta_ID INT AUTO_INCREMENT PRIMARY KEY,
     DataHora DATETIME NOT NULL,
