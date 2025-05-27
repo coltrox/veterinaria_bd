@@ -1,0 +1,73 @@
+-- Listar todos os clientes
+SELECT * FROM Cliente;
+
+-- Listar todos os veterinários
+SELECT * FROM Veterinario;
+
+-- Listar todos os animais
+SELECT * FROM Animal;
+
+-- Listar todas as consultas realizadas
+SELECT * FROM Consulta;
+
+-- Listar os animais do tipo "CARNÍVORO"
+SELECT Nome, Tipo, Raca, Alimentacao_ID FROM Animal WHERE Alimentacao_ID = (
+    SELECT Alimentacao_ID FROM Alimentacao WHERE Nome = 'CARNIVORO'
+);
+
+-- Listar os animais do tipo "HERBÍVORO"
+SELECT Nome, Tipo, Raca, Alimentacao_ID FROM Animal WHERE Alimentacao_ID = (
+    SELECT Alimentacao_ID FROM Alimentacao WHERE Nome = 'HERBIVORO'
+);
+
+-- Listar os animais do tipo "ONÍVORO"
+SELECT Nome, Tipo, Raca, Alimentacao_ID FROM Animal WHERE Alimentacao_ID = (
+    SELECT Alimentacao_ID FROM Alimentacao WHERE Nome = 'ONIVORO'
+);
+
+-- Listar os animais alérgicos
+SELECT Nome, Tipo, Raca FROM Animal WHERE Alergico = 'Sim';
+
+-- Listar todos os animais junto com o nome de seus donos (sem JOIN)
+SELECT 
+    a.Nome AS Nome_Animal,
+    a.Tipo,
+    a.Raca,
+    (SELECT Nome FROM Cliente WHERE Cliente_CPF = a.Cliente_CPF) AS Dono
+FROM Animal a;
+
+-- Listar as consultas com nome do animal, nome do veterinário e diagnóstico (sem JOIN)
+SELECT 
+    c.Consulta_ID,
+    (SELECT Nome FROM Animal WHERE Animal_ID = c.Animal_ID) AS Nome_Animal,
+    (SELECT Nome FROM Veterinario WHERE Veterinario_CRV = c.Veterinario_CRV) AS Nome_Veterinario,
+    c.DataHora,
+    c.Valor,
+    c.Diagnostico
+FROM Consulta c;
+
+-- Listar o total faturado pela clínica
+SELECT SUM(Valor) AS Total_Faturado FROM Consulta;
+
+-- Ver faturamento por veterinário (sem JOIN)
+SELECT 
+    v.Nome AS Veterinario,
+    (
+        SELECT SUM(Valor) FROM Consulta WHERE Veterinario_CRV = v.Veterinario_CRV
+    ) AS Faturamento
+FROM Veterinario v;
+
+-- Contar quantos animais existem por dieta (alimentacao)
+SELECT 
+    (SELECT Nome FROM Alimentacao WHERE Alimentacao_ID = a.Alimentacao_ID) AS Dieta,
+    COUNT(*) AS Quantidade
+FROM Animal a
+GROUP BY a.Alimentacao_ID;
+
+-- Contar quantas consultas cada veterinário realizou (sem JOIN)
+SELECT 
+    v.Nome AS Veterinario,
+    (
+        SELECT COUNT(*) FROM Consulta WHERE Veterinario_CRV = v.Veterinario_CRV
+    ) AS Numero_Consultas
+FROM Veterinario v;
